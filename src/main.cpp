@@ -20,6 +20,7 @@ int main(int argc, char* argv[])
 	image.load(image_path);
 	std::cout << std::format("Width: {}, Height: {}\n", image.width(), image.height());
 	image.clamp(80);
+	std::cout << std::format("Compressed Width: {}, Height: {}\n", image.width(), image.height());
 
 	// auto buf_image_data = image.load(image_path);
 	// if (!buf_image_data) {
@@ -28,7 +29,7 @@ int main(int argc, char* argv[])
 	// }
 	// std::vector<unsigned char> image_data = *buf_image_data;
 
-	for (size_t i = 0; i < 30; i++) {
+	for (size_t i = 0; i < image.data().size(); i++) {
 		std::cout << ASCII::rgb_to_symbol(image[i], image[++i], image[++i]);
 	}
 }

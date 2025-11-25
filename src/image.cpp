@@ -28,16 +28,22 @@ void Image::clamp(size_t max_width)
 	if (max_width > m_width) {
 		max_width = m_width;
 	}
-	const size_t step_size = m_width / max_width;
+	const double step_size = m_width / max_width;
 
 	std::vector<unsigned char> compressed_data{};
-	for (size_t i = 0; i < m_data.size(); i += step_size * 3) {
-		const size_t index = std::floor(i);
-		compressed_data.push_back(m_data[index]);	// R
-		compressed_data.push_back(m_data[index + 1]);	// G
-		compressed_data.push_back(m_data[index + 2]);	// B
+	double step = 0;
+	// Prints first row only
+	for (size_t i = 0; i < max_width; i++) {
+		const size_t index = (i == max_width)
+			? max_width
+			: std::floor(step);
+		compressed_data.push_back(m_data[index * 3]);		// R
+		compressed_data.push_back(m_data[index * 3 + 1]);	// G
+		compressed_data.push_back(m_data[index * 3 + 2]);	// B
+		step += step_size;
 	}
 
 	m_data.clear();
 	m_data = std::move(compressed_data);
+	m_width = max_width;
 }

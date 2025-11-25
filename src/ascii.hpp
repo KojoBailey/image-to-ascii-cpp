@@ -1,12 +1,13 @@
 #include <array>
-#include <cstdint>
+#include <cmath>
 
 class ASCII {
 public:
 	static constexpr char rgb_to_symbol(const char r, const char g, const char b)
 	{
-		const size_t max = 255 * 3;
-		return symbols[((max - (r + g + b)) / max) * 10];
+		const float intensity = (r + g + b) / (255.0f * 3.0f);
+		const size_t index = std::round((1.0f - intensity) * 9);
+		return symbols[index];
 	}
 
 private:
