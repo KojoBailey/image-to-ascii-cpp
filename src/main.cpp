@@ -29,7 +29,18 @@ int main(int argc, char* argv[])
 	// }
 	// std::vector<unsigned char> image_data = *buf_image_data;
 
-	for (size_t i = 0; i < image.data().size(); i++) {
-		std::cout << ASCII::rgb_to_symbol(image[i], image[++i], image[++i]);
+	std::cout << std::format("Expected {} | Actual: {}\n", image.height() * image.width() * 3, image.data().size());
+	for (size_t row = 0; row < image.height(); row++) {
+		for (size_t i = 0; i < image.width(); i++) {
+			const size_t start = i * 3 * row;
+			const auto buffer = ASCII::rgb_to_symbol(image[start], image[start+1], image[start+2]);
+			if (!buffer) {
+				std::cerr << "RGB out of range.\n";
+				std::cout << std::format("[{:03}, {:03}, {:03}]", image[start], image[start+1], image[start+2]);
+				return -1;
+			}
+			std::cout << *buffer;
+		}
+		std::cout << '\n';
 	}
 }

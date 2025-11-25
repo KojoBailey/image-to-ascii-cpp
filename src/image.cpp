@@ -29,22 +29,26 @@ void Image::clamp(size_t max_width)
 		max_width = m_width;
 	}
 	const float step_size = static_cast<float>(m_width) / static_cast<float>(max_width);
+	const size_t max_height = std::round(static_cast<float>(m_height) / step_size);
 
 	std::vector<unsigned char> compressed_data{};
 	double step = 0;
-	// Prints first row only
-	for (size_t i = 0; i < max_width; i++) {
-		const size_t index = (i == max_width)
-			? max_width
-			: std::floor(step);
-		compressed_data.push_back(m_data[index * 3]);		// R
-		compressed_data.push_back(m_data[index * 3 + 1]);	// G
-		compressed_data.push_back(m_data[index * 3 + 2]);	// B
-		step += step_size;
+	for (size_t row = 0; row < 5; row++) {
+		for (size_t j = 0; j < max_width; j++) {
+			const size_t index = (j == max_width)
+				? max_width
+				: std::floor(step);
+			const size_t start = index * row * 3;
+			compressed_data.push_back(m_data[start]);	// R
+			compressed_data.push_back(m_data[start+1]);	// G
+			compressed_data.push_back(m_data[start+2]);	// B
+			step += step_size;
+		}
+		step = max_width * row * 3;
 	}
 
 	m_data.clear();
 	m_data = std::move(compressed_data);
-	m_height = std::round(static_cast<float>(m_height) / step_size);
 	m_width = max_width;
+	m_height = max_height;
 }
