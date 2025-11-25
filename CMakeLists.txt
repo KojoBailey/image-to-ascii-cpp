@@ -6,6 +6,7 @@ set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc -static-libstdc++")
 
 file(GLOB SOURCES 
   src/main.cpp
+	src/image.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
