@@ -28,7 +28,7 @@ void Image::clamp(size_t max_width)
 	if (max_width > m_width) {
 		max_width = m_width;
 	}
-	const double step_size = m_width / max_width;
+	const float step_size = static_cast<float>(m_width) / static_cast<float>(max_width);
 
 	std::vector<unsigned char> compressed_data{};
 	double step = 0;
@@ -45,5 +45,6 @@ void Image::clamp(size_t max_width)
 
 	m_data.clear();
 	m_data = std::move(compressed_data);
+	m_height = std::round(static_cast<float>(m_height) / step_size);
 	m_width = max_width;
 }
