@@ -18,9 +18,9 @@ int main(int argc, char* argv[])
 
 	Image image;
 	image.load(image_path);
-	std::cout << std::format("Width: {}, Height: {}\n", image.width(), image.height());
+	std::cout << std::format("Size: {}, Width: {}, Height: {}\n", image.size(), image.width(), image.height());
 	image.clamp(80);
-	std::cout << std::format("Compressed Width: {}, Height: {}\n", image.width(), image.height());
+	std::cout << std::format("Compressed Size {}, Width: {}, Height: {}\n", image.size(), image.width(), image.height());
 
 	// auto buf_image_data = image.load(image_path);
 	// if (!buf_image_data) {
@@ -33,10 +33,13 @@ int main(int argc, char* argv[])
 	for (size_t row = 0; row < image.height(); row++) {
 		for (size_t i = 0; i < image.width(); i++) {
 			const size_t start = i * 3 * row;
-			const auto buffer = ASCII::rgb_to_symbol(image[start], image[start+1], image[start+2]);
+			const unsigned char r = image[start];
+			const unsigned char g = image[start+1];
+			const unsigned char b = image[start+2];
+			const auto buffer = ASCII::rgb_to_symbol(r, g, b);
 			if (!buffer) {
 				std::cerr << "RGB out of range.\n";
-				std::cout << std::format("[{:03}, {:03}, {:03}]", image[start], image[start+1], image[start+2]);
+				std::cout << std::format("[{:03}, {:03}, {:03}]", r, g, b);
 				return -1;
 			}
 			std::cout << *buffer;

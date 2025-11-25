@@ -20,6 +20,7 @@ public:
 
 	int width() const { return m_width; }
 	int height() const { return m_height; }
+	int size() const { return m_data.size(); }
 
 private:
 	std::vector<unsigned char> m_data{};
