@@ -12,6 +12,8 @@ public:
 
 	void load(const std::filesystem::path&);
 
+	void clamp(const size_t max_width);
+
 	const std::vector<unsigned char>& data() const { return m_data; }
 
 	const unsigned char operator[](size_t index) const { return m_data[index]; }

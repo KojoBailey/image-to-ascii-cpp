@@ -1,6 +1,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "image.hpp"
 
+#include <cmath>
+
 void Image::load(unsigned char* _data, const int _width, const int _height)
 {
 	m_width = _width;
@@ -19,4 +21,23 @@ void Image::load(const std::filesystem::path& _path)
 	// }
 	load(data, width, height);
 	stbi_image_free(data);
+}
+
+void Image::clamp(size_t max_width)
+{
+	if (max_width > m_width) {
+		max_width = m_width;
+	}
+	const size_t step_size = m_width / max_width;
+
+	std::vector<unsigned char> compressed_data{};
+	for (size_t i = 0; i < m_data.size(); i += step_size * 3) {
+		const size_t index = std::floor(i);
+		compressed_data.push_back(m_data[index]);	// R
+		compressed_data.push_back(m_data[index + 1]);	// G
+		compressed_data.push_back(m_data[index + 2]);	// B
+	}
+
+	m_data.clear();
+	m_data = std::move(compressed_data);
 }

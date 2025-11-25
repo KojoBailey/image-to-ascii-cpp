@@ -2,8 +2,6 @@
 #include "ascii.hpp"
 
 #include <iostream>
-#include <array>
-#include <expected>
 #include <format>
 
 int main(int argc, char* argv[])
@@ -14,10 +12,15 @@ int main(int argc, char* argv[])
 	}
 	std::filesystem::path image_path = argv[1];
 
+	const size_t max_width = 80; // [!] Could also offer 100, 120, and 140.
+
 	std::cout << std::format("Converting image \"{}\"...\n", image_path.string());
 
 	Image image;
 	image.load(image_path);
+	std::cout << std::format("Width: {}, Height: {}\n", image.width(), image.height());
+	image.clamp(80);
+
 	// auto buf_image_data = image.load(image_path);
 	// if (!buf_image_data) {
 	// 	std::cerr << "Failed to load image.\n";
