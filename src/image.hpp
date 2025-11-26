@@ -14,9 +14,9 @@ struct Pixel {
 	std::uint8_t a{255};
 
 	Pixel() = default;
-	Pixel(std::uint8_t _r, std::uint8_t _g, std::uint8_t _b) { set(_r, _g, _b); }
+	Pixel(const std::uint8_t _r, const std::uint8_t _g, const std::uint8_t _b, const std::uint8_t _a) { set(_r, _g, _b, _a); }
 
-	void set(std::uint8_t _r, std::uint8_t _g, std::uint8_t _b);
+	void set(const std::uint8_t _r, const std::uint8_t _g, const std::uint8_t _b, const std::uint8_t _a = 255);
 };
 
 class Image {

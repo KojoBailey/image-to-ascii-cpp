@@ -9,11 +9,12 @@ float size_t_div(const size_t a, const size_t b)
 	return static_cast<float>(a) / static_cast<float>(b);
 }
 
-void Pixel::set(const std::uint8_t _r, const std::uint8_t _g, const std::uint8_t _b)
+void Pixel::set(const std::uint8_t _r, const std::uint8_t _g, const std::uint8_t _b, const std::uint8_t _a)
 {
 	r = _r;
 	g = _g;
 	b = _b;
+	a = _a;
 }
 
 void Image::load(unsigned char* _data, const int _width, const int _height)
@@ -21,14 +22,14 @@ void Image::load(unsigned char* _data, const int _width, const int _height)
 	m_width = _width;
 	m_height = _height;
 
-	std::vector<unsigned char> buffer{_data, _data + m_width * m_height * 3};
+	std::vector<unsigned char> buffer{_data, _data + m_width * m_height *4};
 
 	m_data.clear();
-	m_data.resize(buffer.size() / 3);
+	m_data.resize(buffer.size() / 4);
 	size_t i = 0;
 	for (Pixel& pixel : m_data) {
-		pixel.set(buffer[i], buffer[i+1], buffer[i+2]);
-		i += 3;
+		pixel.set(buffer[i], buffer[i+1], buffer[i+2], buffer[i+3]);
+		i += 4;
 	}
 }
 
@@ -36,7 +37,7 @@ void Image::load(const std::filesystem::path& _path)
 {
 	int width, height, channels;
 	auto str_path = _path.string();
-	unsigned char* data = stbi_load(str_path.c_str(), &width, &height, &channels, 3);
+	unsigned char* data = stbi_load(str_path.c_str(), &width, &height, &channels, 4);
 	// if (!data) {
 	// 	return std::unexpected{-1};
 	// }
