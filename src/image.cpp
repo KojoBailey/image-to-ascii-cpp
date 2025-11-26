@@ -4,6 +4,11 @@
 #include <cmath>
 #include <iostream>
 
+float size_t_div(const size_t a, const size_t b)
+{
+	return static_cast<float>(a) / static_cast<float>(b);
+}
+
 void Pixel::set(const std::uint8_t _r, const std::uint8_t _g, const std::uint8_t _b)
 {
 	r = _r;
@@ -45,23 +50,30 @@ void Image::clamp(size_t max_width)
 		max_width = m_width;
 	}
 	/*const*/ size_t max_height =
-		std::round(static_cast<float>(m_height) * static_cast<float>(max_width) / static_cast<float>(m_width));
-	const float step_size = m_data.size() / (max_width * max_height);
-	std::cout << std::format("Step size: {}\n", step_size);
+		std::round(static_cast<float>(m_height) * size_t_div(max_width, m_width));
+	const float x_step_size = size_t_div(m_width, max_width);
+	const float y_step_size = size_t_div(m_height, max_height);
+	std::cout << std::format("Row step size: {}, Column step size: {}\n", x_step_size, y_step_size);
 
 	std::vector<Pixel> compressed_data{};
 	// max_height = 20; //[!] remove
-	double step = 0;
+	double y_step = 0;
 	for (size_t row = 0; row < max_height; row++) {
-		// double step = m_width * row;
+		const size_t y_index = ((row+1) == max_height)
+			? max_height
+			: std::floor(y_step);
+
+		double x_step = 0;
 		for (size_t column = 0; column < max_width; column++) {
-			const size_t index = (column == max_width)
+			const size_t x_index = ((column+1) == max_width)
 				? max_width
-				: std::floor(step);
-			std::cout << std::format("{:03}:{:03} - {:03}\n", row+1, column+1, index);
-			compressed_data.push_back(m_data[index]);
-			step += step_size;
+				: std::floor(x_step);
+			std::cout << std::format("{:03}:{:03} -> {:03}:{:03}\n", y_index, x_index, row, column);
+			compressed_data.push_back(m_data[x_index * y_index]);
+			x_step += x_step_size;
 		}
+
+		y_step += y_step_size;
 	}
 
 	m_data.clear();
