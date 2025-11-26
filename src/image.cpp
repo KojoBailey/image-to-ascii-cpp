@@ -4,12 +4,27 @@
 #include <cmath>
 #include <iostream>
 
+void Pixel::set(const std::uint8_t _r, const std::uint8_t _g, const std::uint8_t _b)
+{
+	r = _r;
+	g = _g;
+	b = _b;
+}
+
 void Image::load(unsigned char* _data, const int _width, const int _height)
 {
 	m_width = _width;
 	m_height = _height;
+
 	std::vector<unsigned char> buffer{_data, _data + m_width * m_height * 3};
-	m_data = std::move(buffer);
+
+	m_data.clear();
+	m_data.resize(buffer.size() / 3);
+	size_t i = 0;
+	for (Pixel& pixel : m_data) {
+		pixel.set(buffer[i], buffer[i+1], buffer[i+2]);
+		i += 3;
+	}
 }
 
 void Image::load(const std::filesystem::path& _path)
@@ -34,7 +49,7 @@ void Image::clamp(size_t max_width)
 	const float step_size = (m_data.size() / 3.0f) / (max_width * max_height) * 3.0f;
 	std::cout << std::format("Step size: {}\n", step_size);
 
-	std::vector<unsigned char> compressed_data{};
+	std::vector<Pixel> compressed_data{};
 	// max_height = 20; //[!] remove
 	for (size_t row = 0; row < max_height; row++) {
 		double step = m_width * row * 3;
@@ -43,9 +58,7 @@ void Image::clamp(size_t max_width)
 				? max_width
 				: std::floor(step);
 			std::cout << std::format("{:03}:{:03} - {:03}\n", row+1, column+1, index);
-			compressed_data.push_back(m_data[index]);	// R
-			compressed_data.push_back(m_data[index+1]);	// G
-			compressed_data.push_back(m_data[index+2]);	// B
+			compressed_data.push_back(m_data[index]);
 			step += step_size;
 		}
 	}
