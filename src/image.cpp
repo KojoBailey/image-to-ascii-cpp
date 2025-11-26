@@ -33,14 +33,20 @@ void Image::load(unsigned char* _data, const int _width, const int _height)
 	}
 }
 
-void Image::load(const std::filesystem::path& _path)
+auto Image::load(const std::filesystem::path& _path)
+-> std::expected<void, std::string>
 {
+	if (std::filesystem::exists(_path)) {
+		return std::unexpected(std::format("File at \"{}\" does not exist.", _path.string()));
+	}
+
 	int width, height, channels;
 	auto str_path = _path.string();
 	unsigned char* data = stbi_load(str_path.c_str(), &width, &height, &channels, 4);
-	// if (!data) {
-	// 	return std::unexpected{-1};
-	// }
+	if (!data) {
+		return std::unexpected{"Failed to load image."};
+	}
+
 	load(data, width, height);
 	stbi_image_free(data);
 }

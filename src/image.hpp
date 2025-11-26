@@ -2,6 +2,7 @@
 #define IMAGE_HPP
 
 #include <cstdint>
+#include <expected>
 #include <filesystem>
 #include <vector>
 
@@ -23,7 +24,7 @@ class Image {
 public:
 	void load(unsigned char* _data, const int _width, const int _height);
 
-	void load(const std::filesystem::path&);
+	auto load(const std::filesystem::path&) -> std::expected<void, std::string>;
 
 	void clamp(const size_t max_width);
 

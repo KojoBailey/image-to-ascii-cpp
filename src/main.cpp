@@ -18,16 +18,15 @@ int main(int argc, char* argv[])
 
 	Image image;
 	image.load(image_path);
+	auto image_check = image.load(image_path);
+	if (!image_check) {
+		std::cerr << image_check.error();;
+		return -1;
+	}
 	std::cout << std::format("Size: {}, Width: {}, Height: {}\n", image.size(), image.width(), image.height());
+	
 	image.clamp(80);
 	std::cout << std::format("Compressed Size {}, Width: {}, Height: {}\n", image.size(), image.width(), image.height());
-
-	// auto buf_image_data = image.load(image_path);
-	// if (!buf_image_data) {
-	// 	std::cerr << "Failed to load image.\n";
-	// 	return buf_image_data.error();
-	// }
-	// std::vector<unsigned char> image_data = *buf_image_data;
 
 	std::cout << "Symbols -> {";
 	for (char symbol : ASCII::symbols) {
