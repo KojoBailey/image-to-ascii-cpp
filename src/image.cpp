@@ -49,14 +49,12 @@ void Image::clamp(size_t max_width)
 	if (max_width > m_width) {
 		max_width = m_width;
 	}
-	/*const*/ size_t max_height =
-		std::round(static_cast<float>(m_height) * size_t_div(max_width, m_width)) / 2.0f;
+	size_t max_height = std::round(static_cast<float>(m_height) * size_t_div(max_width, m_width)) / 2.0f;
 	const float x_step_size = size_t_div(m_width, max_width);
 	const float y_step_size = size_t_div(m_height, max_height);
 	std::cout << std::format("Row step size: {}, Column step size: {}\n", x_step_size, y_step_size);
 
 	std::vector<Pixel> compressed_data{};
-	// max_height = 20; //[!] remove
 	double y_step = 0;
 	for (size_t row = 0; row < max_height; row++) {
 		const size_t y_index = (row+1) == max_height
@@ -68,7 +66,7 @@ void Image::clamp(size_t max_width)
 			const size_t x_index = (column+1) == max_width
 				? m_width-1
 				: std::floor(x_step);
-			std::cout << std::format("{:03}:{:03} -> {:03}:{:03}\n", y_index, x_index, row, column);
+			// std::cout << std::format("{:03}:{:03} -> {:03}:{:03}\n", y_index, x_index, row, column);
 			compressed_data.push_back(m_data[x_index * y_index]);
 			x_step += x_step_size;
 		}
