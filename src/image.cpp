@@ -67,7 +67,7 @@ void Image::clamp(size_t max_width)
 				? m_width-1
 				: std::floor(x_step);
 			// std::cout << std::format("{:03}:{:03} -> {:03}:{:03}\n", y_index, x_index, row, column);
-			compressed_data.push_back(m_data[x_index * y_index]);
+			compressed_data.push_back(m_data[y_index * m_width + x_index]);
 			x_step += x_step_size;
 		}
 
