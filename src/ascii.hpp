@@ -18,6 +18,5 @@ public:
 		return symbols[index];
 	}
 
-private:
 	static constexpr std::array<char, 10> symbols{'.', ':', '-', '=', '+', '*', '/', '%', '#', '@'};
 };

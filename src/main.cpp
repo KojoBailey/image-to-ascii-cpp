@@ -29,9 +29,11 @@ int main(int argc, char* argv[])
 	// }
 	// std::vector<unsigned char> image_data = *buf_image_data;
 
-	for (int i = 0; i <= 255; i += 15) {
-		std::cout << std::format("{:03}: {}\n", i, ASCII::rgb_to_symbol(i, i, i).value());
+	std::cout << "Symbols -> {";
+	for (char symbol : ASCII::symbols) {
+		std::cout << symbol;
 	}
+	std::cout << "}\n";
 
 	std::cout << std::format("Expected {} | Actual: {}\n", image.height() * image.width() * 3, image.data().size());
 
