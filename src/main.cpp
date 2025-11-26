@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
 		}
 		std::cout << *buffer;
 		
-		if (Image::is_new_row(i, image.width())) {
+		if (Image::is_row_end(i, image.width())) {
 			std::cout << '\n';
 		}
 

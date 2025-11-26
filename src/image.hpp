@@ -35,9 +35,9 @@ public:
 	int height() const { return m_height; }
 	int size() const { return m_data.size(); }
 
-	static bool is_new_row(const size_t index, const size_t width)
+	static bool is_row_end(const size_t index, const size_t width)
 	{
-		return (index > 0 && index % width == 0);
+		return (index > 0 && (index+1) % width == 0);
 	}
 
 private:
