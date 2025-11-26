@@ -12,7 +12,10 @@ int main(int argc, char* argv[])
 	}
 	std::filesystem::path image_path = argv[1];
 
-	const size_t max_width = 80; // [!] Could also offer 100, 120, and 140.
+	std::cout << "Enter output width (recommended max 140) or nothing for default (80):\n";
+	std::string buf_input;
+	std::cin >> buf_input;
+	const size_t max_width = buf_input == "" ? 80 : std::stoi(buf_input);
 
 	std::cout << std::format("Converting image \"{}\"...\n", image_path.string());
 
@@ -24,8 +27,8 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 	std::cout << std::format("Size: {}, Width: {}, Height: {}\n", image.size(), image.width(), image.height());
-	
-	image.clamp(80);
+
+	image.clamp(max_width);
 	std::cout << std::format("Compressed Size {}, Width: {}, Height: {}\n", image.size(), image.width(), image.height());
 
 	std::cout << "Symbols -> {";

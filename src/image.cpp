@@ -36,7 +36,7 @@ void Image::load(unsigned char* _data, const int _width, const int _height)
 auto Image::load(const std::filesystem::path& _path)
 -> std::expected<void, std::string>
 {
-	if (std::filesystem::exists(_path)) {
+	if (!std::filesystem::exists(_path)) {
 		return std::unexpected(std::format("File at \"{}\" does not exist.", _path.string()));
 	}
 
@@ -49,6 +49,7 @@ auto Image::load(const std::filesystem::path& _path)
 
 	load(data, width, height);
 	stbi_image_free(data);
+	return {};
 }
 
 void Image::clamp(size_t max_width)
@@ -73,7 +74,6 @@ void Image::clamp(size_t max_width)
 			const size_t x_index = (column+1) == max_width
 				? m_width-1
 				: std::floor(x_step);
-			// std::cout << std::format("{:03}:{:03} -> {:03}:{:03}\n", y_index, x_index, row, column);
 			compressed_data.push_back(m_data[y_index * m_width + x_index]);
 			x_step += x_step_size;
 		}
