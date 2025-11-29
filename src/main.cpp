@@ -32,6 +32,7 @@ int main(int argc, char* argv[])
 	std::cout << std::format("Compressed Size {}, Width: {}, Height: {}\n", image.size(), image.width(), image.height());
 
 	std::string symbols{};
+	symbols.reserve(ASCII::symbols.size());
 	for (char symbol : ASCII::symbols) {
 		symbols += symbol;
 	}
@@ -41,6 +42,7 @@ int main(int argc, char* argv[])
 
 	size_t i = 0;
 	std::string output{};
+	output.reserve(image.size());
 	for (const Pixel& pixel : image.data()) {
 		const auto buffer = ASCII::rgb_to_symbol(pixel.r, pixel.g, pixel.b, pixel.a);
 		if (!buffer) {
