@@ -20,7 +20,6 @@ int main(int argc, char* argv[])
 	std::cout << std::format("Converting image \"{}\"...\n", image_path.string());
 
 	Image image;
-	image.load(image_path);
 	auto image_check = image.load(image_path);
 	if (!image_check) {
 		std::cerr << image_check.error();;
