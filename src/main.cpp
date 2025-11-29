@@ -31,11 +31,11 @@ int main(int argc, char* argv[])
 	image.clamp(max_width);
 	std::cout << std::format("Compressed Size {}, Width: {}, Height: {}\n", image.size(), image.width(), image.height());
 
-	std::cout << "Symbols -> {";
+	std::string symbols{};
 	for (char symbol : ASCII::symbols) {
-		std::cout << symbol;
+		symbols += symbol;
 	}
-	std::cout << "}\n";
+	std::cout << "Symbols -> {" << symbols << "}\n";
 
 	std::cout << std::format("Expected {} | Actual: {}\n", image.height() * image.width() * 3, image.data().size());
 
