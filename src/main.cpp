@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
 {
 	if (argc < 2) {
 		std::cerr << "Missing input file.\n";
-		return -1;
+		return 1;
 	}
 	std::filesystem::path image_path = argv[1];
 
@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 	auto image_check = image.load(image_path);
 	if (!image_check) {
 		std::cerr << image_check.error();;
-		return -1;
+		return 1;
 	}
 	std::cout << std::format("Size: {}, Width: {}, Height: {}\n", image.size(), image.width(), image.height());
 
@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 		if (!buffer) {
 			std::cerr << buffer.error() << '\n';
 			std::cout << std::format("[{:03}, {:03}, {:03}, {:03}]", pixel.r, pixel.g, pixel.b, pixel.a);
-			return -1;
+			return 1;
 		}
 		output += *buffer;
 		
