@@ -25,19 +25,8 @@ int main(int argc, char* argv[])
 		std::cerr << image_check.error();;
 		return 1;
 	}
-	std::cout << std::format("Size: {}, Width: {}, Height: {}\n", image.size(), image.width(), image.height());
 
 	image.clamp(max_width);
-	std::cout << std::format("Compressed Size {}, Width: {}, Height: {}\n", image.size(), image.width(), image.height());
-
-	std::string symbols{};
-	symbols.reserve(ASCII::symbols.size());
-	for (char symbol : ASCII::symbols) {
-		symbols += symbol;
-	}
-	std::cout << "Symbols -> {" << symbols << "}\n";
-
-	std::cout << std::format("Expected {} | Actual: {}\n", image.height() * image.width() * 3, image.data().size());
 
 	size_t i = 0;
 	std::string output{};
