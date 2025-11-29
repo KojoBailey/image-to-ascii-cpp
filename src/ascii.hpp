@@ -10,7 +10,7 @@ public:
 	static std::optional<char> rgb_to_symbol(const unsigned char r, const unsigned char g, const unsigned char b, const unsigned char a)
 	{
 		// Using HSL formula.
-		std::function<float(const unsigned char)> rgb_byte_to_float = [](const unsigned char channel) {
+		auto rgb_byte_to_float = [](const unsigned char channel) {
 			return channel / 255.0f;
 		};
 		const float rn = rgb_byte_to_float(r);
