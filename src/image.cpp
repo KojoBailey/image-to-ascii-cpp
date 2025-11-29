@@ -56,10 +56,6 @@ auto Image::load(const std::filesystem::path& _path)
 void Image::clamp(size_t max_width)
 {
 	const size_t new_width = std::min(max_width, m_width);
-	if (new_width == m_width) {
-		m_height /= 2;
-		return;
-	}
 	const size_t new_height = std::round(static_cast<float>(m_height) * float_div<size_t>(new_width, m_width) / 2.0f);
 	const size_t new_size = new_height * new_width;
 	const float x_step_size = float_div<size_t>(m_width, new_width);
