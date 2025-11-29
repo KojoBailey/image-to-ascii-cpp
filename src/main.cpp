@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
 	}
 	std::filesystem::path image_path = argv[1];
 
-	std::cout << "Enter output width (recommended max 140) or nothing for default (80):\n";
+	std::cout << "Enter output width or nothing for default (80):\n";
 	std::string buf_input;
 	std::getline(std::cin, buf_input);
 	const size_t max_width = buf_input.empty() ? 80 : std::stoul(buf_input);
