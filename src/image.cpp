@@ -54,13 +54,14 @@ auto Image::load(const std::filesystem::path& _path)
 void Image::clamp(size_t max_width)
 {
 	const size_t new_width = std::min(max_width, m_width);
+	if (new_width == m_width) {
+		return; // No need to clamp.
+	}
 	const size_t new_height = std::round(static_cast<float>(m_height) * float_div<size_t>(new_width, m_width) / 2.0f);
+	const size_t new_size = new_height * new_width;
 	const float x_step_size = float_div<size_t>(m_width, new_width);
 	const float y_step_size = float_div<size_t>(m_height, new_height);
 
-	std::vector<Pixel> compressed_data{};
-	const size_t new_size = new_height * new_width;
-	compressed_data.reserve(new_size);
 	for (size_t i = 0; i < new_size; i++) {
 		const size_t column = i % new_width;
 		const size_t row = i / new_width;
@@ -70,13 +71,12 @@ void Image::clamp(size_t max_width)
 		const size_t y_index = (row+1) == new_height
 			? m_height-1
 			: std::floor(row * y_step_size);
-		const size_t index = y_index * m_width + x_index;
+		const size_t target_i = y_index * m_width + x_index;
 
-		compressed_data.push_back(m_data[index]);
+		m_data[i] = m_data[target_i];
 	}
+	m_data.resize(new_size);
 
-	m_data.clear();
-	m_data = std::move(compressed_data);
 	m_width = new_width;
 	m_height = new_height;
 }
