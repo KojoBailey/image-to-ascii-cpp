@@ -7,7 +7,8 @@
 
 class ASCII {
 public:
-	static std::optional<char> rgb_to_symbol(const unsigned char r, const unsigned char g, const unsigned char b, const unsigned char a)
+	static auto rgb_to_symbol(const unsigned char r, const unsigned char g, const unsigned char b, const unsigned char a)
+	-> std::optional<char>
 	{
 		// Using HSL formula.
 		auto rgb_byte_to_float = [](const unsigned char channel) {
