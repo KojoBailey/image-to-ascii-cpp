@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <expected>
 #include <filesystem>
+#include <functional>
 #include <vector>
 
 #include "stb_image.h"
@@ -22,21 +23,23 @@ struct Pixel {
 
 class Image {
 public:
-	void load(unsigned char* _data, const int _width, const int _height);
+	~Image() { clean_up(); }
+
+	auto load(unsigned char* _data, const int _width, const int _height) -> std::expected<void, std::string>;
 
 	auto load(const std::filesystem::path&) -> std::expected<void, std::string>;
 
 	void clamp(const size_t max_width);
 
-	const std::vector<Pixel>& data() const { return m_data; }
+	[[nodiscard]] const std::vector<Pixel>& data() const { return m_data; }
 
-	const Pixel operator[](size_t index) const { return m_data[index]; }
+	[[nodiscard]] const Pixel operator[](size_t index) const { return m_data[index]; }
 
-	int width() const { return m_width; }
-	int height() const { return m_height; }
-	int size() const { return m_data.size(); }
+	[[nodiscard]] int width() const { return m_width; }
+	[[nodiscard]] int height() const { return m_height; }
+	[[nodiscard]] int size() const { return m_data.size(); }
 
-	static bool is_row_end(const size_t index, const size_t width)
+	[[nodiscard]] static bool is_row_end(const size_t index, const size_t width)
 	{
 		return (index > 0 && (index+1) % width == 0);
 	}
@@ -46,6 +49,8 @@ private:
 
 	int m_width{};
 	int m_height{};
+
+	std::function<void()> clean_up;
 };
 
 #endif

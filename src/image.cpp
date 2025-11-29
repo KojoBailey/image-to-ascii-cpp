@@ -17,20 +17,22 @@ void Pixel::set(const std::uint8_t _r, const std::uint8_t _g, const std::uint8_t
 	a = _a;
 }
 
-void Image::load(unsigned char* _data, const int _width, const int _height)
+auto Image::load(unsigned char* _data, const int _width, const int _height)
+-> std::expected<void, std::string>
 {
+	if (!_data) {
+		return std::unexpected{"Image data is invalid."};
+	}
+
 	m_width = _width;
 	m_height = _height;
-
-	std::vector<unsigned char> buffer{_data, _data + m_width * m_height *4};
-
-	m_data.clear();
-	m_data.resize(buffer.size() / 4);
-	size_t i = 0;
-	for (Pixel& pixel : m_data) {
-		pixel.set(buffer[i], buffer[i+1], buffer[i+2], buffer[i+3]);
-		i += 4;
-	}
+	size_t pixel_count = m_width * m_height;
+	
+	auto pixel_data = reinterpret_cast<Pixel*>(_data);
+	std::vector<Pixel> buffer{pixel_data, pixel_data + pixel_count};
+	m_data = std::move(buffer);
+	
+	return {};
 }
 
 auto Image::load(const std::filesystem::path& _path)
@@ -43,12 +45,8 @@ auto Image::load(const std::filesystem::path& _path)
 	int width, height, channels;
 	auto str_path = _path.string();
 	unsigned char* data = stbi_load(str_path.c_str(), &width, &height, &channels, 4);
-	if (!data) {
-		return std::unexpected{"Failed to load image."};
-	}
-
 	load(data, width, height);
-	stbi_image_free(data);
+	clean_up = [&] { stbi_image_free(data); };
 	return {};
 }
 
