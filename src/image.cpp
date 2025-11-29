@@ -73,6 +73,8 @@ void Image::clamp(size_t max_width)
 			: std::floor(row * y_step_size);
 		const size_t target_i = y_index * m_width + x_index;
 
+		/* OPTIMISED: Overwrites instead of copies,
+		   since clamped size is always smaller. */
 		m_data[i] = m_data[target_i];
 	}
 	m_data.resize(new_size);
