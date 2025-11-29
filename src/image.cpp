@@ -49,7 +49,7 @@ auto Image::load(const std::filesystem::path& _path)
 	load(data, width, height);
 
 	clean_up = [&] { stbi_image_free(data); }; // Called by destructor.
-	
+
 	return {};
 }
 
@@ -57,7 +57,8 @@ void Image::clamp(size_t max_width)
 {
 	const size_t new_width = std::min(max_width, m_width);
 	if (new_width == m_width) {
-		return; // No need to clamp.
+		m_height /= 2;
+		return;
 	}
 	const size_t new_height = std::round(static_cast<float>(m_height) * float_div<size_t>(new_width, m_width) / 2.0f);
 	const size_t new_size = new_height * new_width;
