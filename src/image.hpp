@@ -47,8 +47,8 @@ public:
 private:
 	std::vector<Pixel> m_data{};
 
-	int m_width{};
-	int m_height{};
+	size_t m_width{};
+	size_t m_height{};
 
 	std::function<void()> clean_up;
 };

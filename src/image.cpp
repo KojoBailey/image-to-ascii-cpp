@@ -1,6 +1,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "image.hpp"
 
+#include <algorithm>
 #include <cmath>
 
 template <typename T>
@@ -52,35 +53,30 @@ auto Image::load(const std::filesystem::path& _path)
 
 void Image::clamp(size_t max_width)
 {
-	if (max_width > m_width) {
-		max_width = m_width;
-	}
-	size_t max_height = std::round(static_cast<float>(m_height) * float_div<size_t>(max_width, m_width) / 2.0f);
-	const float x_step_size = float_div<size_t>(m_width, max_width);
-	const float y_step_size = float_div<size_t>(m_height, max_height);
+	const size_t new_width = std::min(max_width, m_width);
+	const size_t new_height = std::round(static_cast<float>(m_height) * float_div<size_t>(new_width, m_width) / 2.0f);
+	const float x_step_size = float_div<size_t>(m_width, new_width);
+	const float y_step_size = float_div<size_t>(m_height, new_height);
 
 	std::vector<Pixel> compressed_data{};
-	compressed_data.reserve(max_height * max_width);
-	double y_step = 0;
-	for (size_t row = 0; row < max_height; row++) {
-		const size_t y_index = (row+1) == max_height
+	const size_t new_size = new_height * new_width;
+	compressed_data.reserve(new_size);
+	for (size_t i = 0; i < new_size; i++) {
+		const size_t column = i % new_width;
+		const size_t row = i / new_width;
+		const size_t x_index = (column+1) == new_width
+			? m_width-1
+			: std::floor(column * x_step_size);
+		const size_t y_index = (row+1) == new_height
 			? m_height-1
-			: std::floor(y_step);
+			: std::floor(row * y_step_size);
+		const size_t index = y_index * m_width + x_index;
 
-		double x_step = 0;
-		for (size_t column = 0; column < max_width; column++) {
-			const size_t x_index = (column+1) == max_width
-				? m_width-1
-				: std::floor(x_step);
-			compressed_data.push_back(m_data[y_index * m_width + x_index]);
-			x_step += x_step_size;
-		}
-
-		y_step += y_step_size;
+		compressed_data.push_back(m_data[index]);
 	}
 
 	m_data.clear();
 	m_data = std::move(compressed_data);
-	m_width = max_width;
-	m_height = max_height;
+	m_width = new_width;
+	m_height = new_height;
 }
