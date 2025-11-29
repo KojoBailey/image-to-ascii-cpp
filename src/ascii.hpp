@@ -19,9 +19,10 @@ public:
 		const float an = rgb_byte_to_float(a);
 
 		// Using HSL formula.
+		const size_t max_index = symbols.size() - 1;
 		const float lightness = (std::min({rn, gn, bn}) + std::max({rn, gn, bn})) / 2 * an;
-		const size_t index = std::round(lightness * (symbols.size() - 1));
-		if (index < 0 || index > 9) {
+		const size_t index = std::round(lightness * max_index);
+		if (index < 0 || index > max_index) {
 			return std::unexpected{"RGB out of range."};
 		}
 		return symbols[index];
