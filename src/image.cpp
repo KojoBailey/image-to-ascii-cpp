@@ -27,8 +27,8 @@ auto Image::load(unsigned char* _data, const int _width, const int _height)
 
 	m_width = _width;
 	m_height = _height;
+
 	size_t pixel_count = m_width * m_height;
-	
 	auto pixel_data = reinterpret_cast<Pixel*>(_data);
 	std::vector<Pixel> buffer{pixel_data, pixel_data + pixel_count};
 	m_data = std::move(buffer);
@@ -47,7 +47,9 @@ auto Image::load(const std::filesystem::path& _path)
 	auto str_path = _path.string();
 	unsigned char* data = stbi_load(str_path.c_str(), &width, &height, &channels, 4);
 	load(data, width, height);
-	clean_up = [&] { stbi_image_free(data); };
+
+	clean_up = [&] { stbi_image_free(data); }; // Called by destructor.
+	
 	return {};
 }
 
