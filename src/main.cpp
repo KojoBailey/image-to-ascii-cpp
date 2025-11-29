@@ -14,8 +14,8 @@ int main(int argc, char* argv[])
 
 	std::cout << "Enter output width (recommended max 140) or nothing for default (80):\n";
 	std::string buf_input;
-	std::cin >> buf_input;
-	const size_t max_width = buf_input == "" ? 80 : std::stoi(buf_input);
+	std::getline(std::cin, buf_input);
+	const size_t max_width = buf_input.empty() ? 80 : std::stoul(buf_input);
 
 	std::cout << std::format("Converting image \"{}\"...\n", image_path.string());
 
@@ -40,6 +40,7 @@ int main(int argc, char* argv[])
 	std::cout << std::format("Expected {} | Actual: {}\n", image.height() * image.width() * 3, image.data().size());
 
 	size_t i = 0;
+	std::string output{};
 	for (const Pixel& pixel : image.data()) {
 		const auto buffer = ASCII::rgb_to_symbol(pixel.r, pixel.g, pixel.b, pixel.a);
 		if (!buffer) {
@@ -47,12 +48,13 @@ int main(int argc, char* argv[])
 			std::cout << std::format("[{:03}, {:03}, {:03}, {:03}]", pixel.r, pixel.g, pixel.b, pixel.a);
 			return -1;
 		}
-		std::cout << *buffer;
+		output += *buffer;
 		
 		if (Image::is_row_end(i, image.width())) {
-			std::cout << '\n';
+			output += '\n';
 		}
 
 		i++;
 	}
+	std::cout << output;
 }
