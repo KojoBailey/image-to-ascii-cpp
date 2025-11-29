@@ -2,7 +2,6 @@
 #include "image.hpp"
 
 #include <cmath>
-#include <iostream>
 
 float size_t_div(const size_t a, const size_t b)
 {
@@ -58,7 +57,6 @@ void Image::clamp(size_t max_width)
 	size_t max_height = std::round(static_cast<float>(m_height) * size_t_div(max_width, m_width) / 2.0f);
 	const float x_step_size = size_t_div(m_width, max_width);
 	const float y_step_size = size_t_div(m_height, max_height);
-	std::cout << std::format("Row step size: {}, Column step size: {}\n", x_step_size, y_step_size);
 
 	std::vector<Pixel> compressed_data{};
 	compressed_data.reserve(max_height * max_width);
