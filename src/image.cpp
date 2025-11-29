@@ -31,7 +31,7 @@ auto Image::load(unsigned char* _data, const int _width, const int _height)
 	auto pixel_data = reinterpret_cast<Pixel*>(_data);
 	std::vector<Pixel> buffer{pixel_data, pixel_data + pixel_count};
 	m_data = std::move(buffer);
-	
+
 	return {};
 }
 
@@ -61,6 +61,7 @@ void Image::clamp(size_t max_width)
 	std::cout << std::format("Row step size: {}, Column step size: {}\n", x_step_size, y_step_size);
 
 	std::vector<Pixel> compressed_data{};
+	compressed_data.reserve(max_height * max_width);
 	double y_step = 0;
 	for (size_t row = 0; row < max_height; row++) {
 		const size_t y_index = (row+1) == max_height
