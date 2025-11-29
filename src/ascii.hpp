@@ -1,14 +1,14 @@
 #include <array>
 #include <cmath>
 #include <algorithm>
-#include <optional>
+#include <expected>
 
 #include <iostream>
 
 class ASCII {
 public:
 	static auto rgb_to_symbol(const unsigned char r, const unsigned char g, const unsigned char b, const unsigned char a)
-	-> std::optional<char>
+	-> std::expected<char, std::string>
 	{
 		auto rgb_byte_to_float = [](const unsigned char channel) {
 			return channel / 255.0f;
@@ -22,8 +22,7 @@ public:
 		const float lightness = (std::min({rn, gn, bn}) + std::max({rn, gn, bn})) / 2 * an;
 		const size_t index = std::round(lightness * (symbols.size() - 1));
 		if (index < 0 || index > 9) {
-			std::cout << std::format("Index: {}\n", index);
-			return {};
+			return std::unexpected{"RGB out of range."};
 		}
 		return symbols[index];
 	}

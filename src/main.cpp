@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
 	for (const Pixel& pixel : image.data()) {
 		const auto buffer = ASCII::rgb_to_symbol(pixel.r, pixel.g, pixel.b, pixel.a);
 		if (!buffer) {
-			std::cerr << "RGB out of range.\n";
+			std::cerr << buffer.error() << '\n';
 			std::cout << std::format("[{:03}, {:03}, {:03}, {:03}]", pixel.r, pixel.g, pixel.b, pixel.a);
 			return -1;
 		}
