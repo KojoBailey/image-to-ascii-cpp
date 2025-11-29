@@ -3,7 +3,8 @@
 
 #include <cmath>
 
-float size_t_div(const size_t a, const size_t b)
+template <typename T>
+float float_div(const T a, const T b)
 {
 	return static_cast<float>(a) / static_cast<float>(b);
 }
@@ -54,9 +55,9 @@ void Image::clamp(size_t max_width)
 	if (max_width > m_width) {
 		max_width = m_width;
 	}
-	size_t max_height = std::round(static_cast<float>(m_height) * size_t_div(max_width, m_width) / 2.0f);
-	const float x_step_size = size_t_div(m_width, max_width);
-	const float y_step_size = size_t_div(m_height, max_height);
+	size_t max_height = std::round(static_cast<float>(m_height) * float_div<size_t>(max_width, m_width) / 2.0f);
+	const float x_step_size = float_div<size_t>(m_width, max_width);
+	const float y_step_size = float_div<size_t>(m_height, max_height);
 
 	std::vector<Pixel> compressed_data{};
 	compressed_data.reserve(max_height * max_width);
