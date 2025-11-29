@@ -3,8 +3,6 @@
 #include <algorithm>
 #include <expected>
 
-#include <iostream>
-
 class ASCII {
 public:
 	static auto rgb_to_symbol(const unsigned char r, const unsigned char g, const unsigned char b, const unsigned char a)
